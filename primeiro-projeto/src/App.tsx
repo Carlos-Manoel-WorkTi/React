@@ -8,8 +8,8 @@ function App() {
     <GlobalStyle/>   
       <Header /> 
       <Container>
-          
-        <Outlet />
+     
+     <Outlet />
       </Container>
 
     </>

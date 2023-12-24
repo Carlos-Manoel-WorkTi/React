@@ -12,7 +12,9 @@ export const GlobalStyle = createGlobalStyle`
     outline: none;
   }
 
-
+html{
+  background-color: black;
+}
 
   button{
     cursor: pointer;
@@ -23,7 +25,7 @@ export const Container = styled.div`
  padding: 0;
  margin: 0;
  background-color: #262626;
- height: 100vh;
+ height: 100%;
  display: flex;
  justify-content: center;
 `
