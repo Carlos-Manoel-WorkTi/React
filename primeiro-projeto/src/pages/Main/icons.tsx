@@ -1,6 +1,7 @@
 import {  TiArrowRightOutline,TiArrowLeftOutline } from "react-icons/ti";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
+import { CiMenuKebab } from "react-icons/ci";
 import styled from "styled-components";
 
 export  const SetaLeft = styled(TiArrowLeftOutline)`
@@ -11,6 +12,13 @@ export  const SetaLeft = styled(TiArrowLeftOutline)`
     color: #75bcf2;
  font-size: 3.3em;
  }
+`
+
+export const ConfigIcon = styled(CiMenuKebab)`
+   display: flex;
+   text-align: end;
+   justify-content: end;
+   align-items: end;
 `
 export  const SetaRight = styled(TiArrowRightOutline)`
  color: #ffffff;
@@ -24,7 +32,7 @@ export  const SetaRight = styled(TiArrowRightOutline)`
 export const AddRep = styled(IoIosAddCircleOutline)`
 
 &:hover{
-   color: #75bcf2;
+   color: green;
    transform: scale(1.2);
 
 }

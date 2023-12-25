@@ -47,15 +47,7 @@ export const Form = styled.form`
     width: 450px;
     }
 `
-// BUTTON
-export const ButtonSubmit = styled.button`
- background-color: transparent;
- color: #ffffff;
- border: none;
- display: flex;
- justify-content: center;
- align-items: center;
-`
+
 // Perfil
 export const Perfil = styled.div`
 padding: 2%;
@@ -67,7 +59,7 @@ padding: 2%;
   gap: 5%;
 `
 export const ImgPerfil = styled.img`
-  border: 1px solid cyan;
+  border: 1px solid rgb(27 82 135 / 96%);
   width: 250px;
   height: 250px;
   border-radius: 50%;
@@ -80,12 +72,20 @@ export const InfPerfil = styled.div`
   font-size: 1.3em;
   padding: 20px;
   border-radius: 4%;
- background: linear-gradient(136deg, rgba(28, 166.58, 197, 0.96) 0%, rgba(28, 166.58, 197, 0) 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 43px;
+ background: linear-gradient(136deg, rgb(27 82 135 / 96%), rgba(28, 166.58, 197, 0) 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 43px;
 
 h2{
   color: #ebebeb;
 }
+h5{
+  color: #c9c9c9;
+}
+p{
+  color: white;
+  padding: 10px;
+}
 `
+//  BUTTON
 
 export const ContainerButtons =  styled.div`
   display: flex;
@@ -106,11 +106,19 @@ img{
   border-radius:50%;
   padding: 2px;
 }
+div{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    width: 100% ;
+}
 `
 
 export const ContainerRep = styled.div`
   display: flex;
   align-items: center;
+  justify-content: start;
   gap: 10px;
   border-bottom:1px solid #1d1d1df1;
   margin-bottom:15px;
@@ -121,3 +129,29 @@ display: flex;
 justify-content: space-around;
 border-bottom: none;
 `
+
+// BUTTON PROCURAR USUARIO
+
+interface ButtonSubmitProps {
+  $ValorDisabled?: boolean; // Adicione a propriedade que deseja utilizar
+}
+
+export const ButtonSubmit = styled.button<ButtonSubmitProps>`
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &[disabled] {
+    opacity: 0.7; /* Define uma opacidade quando o botão estiver desativado */
+    cursor: not-allowed; /* Altera o cursor quando o botão estiver desativado */
+  }
+
+  svg {
+    border-radius: 50%;
+    color: ${props => (props.$ValorDisabled ? 'green' : 'white')};
+  }
+`;
