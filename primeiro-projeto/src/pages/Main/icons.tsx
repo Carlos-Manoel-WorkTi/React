@@ -32,7 +32,7 @@ export  const SetaRight = styled(TiArrowRightOutline)`
 export const AddRep = styled(IoIosAddCircleOutline)`
 
 &:hover{
-   color: green;
+   color: #4f0080;
    transform: scale(1.2);
 
 }

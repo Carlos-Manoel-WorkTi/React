@@ -25,6 +25,13 @@ a{
 }
 `
  
- /* export const links = styled.a`
- color: red;
-` */
+export const Logo = styled.h1`
+  font-size: 2em;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: #42297c;
+  background-image: linear-gradient(45deg, rgb(67, 7, 174), #b48fe6); /* Definição do gradiente */
+  -webkit-background-clip: text; 
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* Tornar o texto transparente */
+`;

@@ -1,13 +1,13 @@
 
 import { Link } from 'react-router-dom'
-import {Heade} from './style'
+import {Heade, Logo} from './style'
 export default function Header() {
   return (
     <Heade>
-      <h1>Meus repositórios</h1>
+      <Logo>Encontre seu GitHub</Logo>
       <ul>
-        <li> <Link to={"/home"}>Home</Link> </li>
-        <li><Link to={"/sobre"}>Sobre</Link></li>
+        <li> <Link to={"/home"}>Inicio</Link> </li>
+        <li><Link to={"/sobre"}>Login</Link></li>
       </ul>
    
     </Heade>

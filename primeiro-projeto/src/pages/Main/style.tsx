@@ -13,7 +13,7 @@ export const Container = styled.main`
   align-items: center;
   gap: 10px;
   background-color: #fffffff0;
-  background-image: url('/TBD.png'); /* Caminho da imagem corrigido */
+  background-image: url('/TBD.png'); 
   background-size:cover;
   background-repeat:no-repeat;
 
@@ -33,35 +33,54 @@ export const ContainerForm = styled.div`
     width: 70%;
 `
 
-export const Form = styled.form`
-    width: 60%;
-    display: flex;
-    justify-content:space-around;
-    
-    input{
+export const Form = styled.form<{error:number | undefined}>`
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+
+  input {
     color: #ffffff;
     padding: 15px;
-    border: 1px solid transparent;
+    border: 1px solid ${props => (props.error ? "red" : "transparent")};
     border-radius: 20px;
     background-color: rgb(17, 19, 20);
     width: 450px;
-    }
-`
+  }
+`;
+
 
 // Perfil
 export const Perfil = styled.div`
 padding: 2%;
-  width: 70%;
+  width: 65%;
   height: auto;
   display: flex;
-  justify-content: start;
+  justify-content: space-around;
   align-items: center;
   gap: 5%;
 `
 export const ImgPerfil = styled.img`
-  border: 1px solid rgb(27 82 135 / 96%);
-  width: 250px;
-  height: 250px;
+  border: 3px solid #4307ae;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin-bottom: -12px;
+`
+
+export const ImgAndName = styled.div`
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  align-items: end;
+  height: 10px;
+  border-radius: 50%;
+
+  h2{
+    padding-top: 1px;
+  }
+`
+export const NamePerfil = styled.div`
+  height: 50px;
   border-radius: 50%;
 `
 export const InfPerfil = styled.div`
@@ -69,11 +88,12 @@ export const InfPerfil = styled.div`
   height: 250px;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   font-size: 1.3em;
   padding: 20px;
   border-radius: 4%;
- background: linear-gradient(136deg, rgb(27 82 135 / 96%), rgba(28, 166.58, 197, 0) 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 43px;
-
+ background: linear-gradient(136deg, rgb(6 3 12),  rgba(28, 166.58, 197, 0) 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 43px;
+ border-bottom-right-radius:0px;
 h2{
   color: #ebebeb;
 }
@@ -85,6 +105,22 @@ p{
   padding: 10px;
 }
 `
+
+// LINHAS DAS INFORMAÇOES DO PERFIL
+export const InfContainer = styled.div`
+  height: auto; /* Ajuste a altura conforme necessário */
+  border-radius: 50%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+`;
+
+export const InfoColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 //  BUTTON
 
 export const ContainerButtons =  styled.div`
@@ -93,13 +129,14 @@ export const ContainerButtons =  styled.div`
   height: 100px;
   align-items: center;
   justify-content: space-between;
-
+  text-align: center;
+  
   &:hover{
     color: blue;
   }
 `
 export const ListAdd = styled.aside`
-width: 30%; height: 100%; background: linear-gradient(175deg, #0A0E0F 0%, black 100%);color:white; padding: 10px;
+width: 30%; max-height: 240px; height:240px;    background: linear-gradient(175deg, #06040b 0%, black 100%);color:white; padding: 10px;
 
 img{
   width: 40px;
@@ -108,7 +145,6 @@ img{
 }
 div{
     display: flex;
-    justify-content: start;
     align-items: center;
     gap: 10px;
     width: 100% ;
@@ -127,6 +163,8 @@ export const ContainerRep = styled.div`
 export const ContainerButtonMoreRep = styled.div`
 display: flex;
 justify-content: space-around;
+align-items: end;
+margin-top: 10%;
 border-bottom: none;
 `
 
@@ -152,6 +190,8 @@ export const ButtonSubmit = styled.button<ButtonSubmitProps>`
 
   svg {
     border-radius: 50%;
-    color: ${props => (props.$ValorDisabled ? 'green' : 'white')};
+    color: ${props => (props.$ValorDisabled ? 'purple' : 'white')};
   }
 `;
+
+
