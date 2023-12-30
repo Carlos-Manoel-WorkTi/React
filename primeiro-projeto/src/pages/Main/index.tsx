@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import {
   Container,
   Form,
@@ -14,6 +14,7 @@ import {
   ImgAndName,
   NamePerfil,
   InfContainer,
+  Edit,
 } from "./style";
 import { FaGithub } from "react-icons/fa";
 import {
@@ -24,15 +25,23 @@ import {
   SetaLeft,
   SetaRight,
 } from "./icons";
+
+
 import api from "../../services/api";
+import { ShowerRepOpt, Usuario,Ok } from "./style";
+import { Save,Cancel } from "./icons";
+import { Link } from "react-router-dom";
 
 interface Repositorio {
   login: string;
   name: string;
   img: string;
-  total_repo: string;
+  total_repo?: string;
   stars?: number;
   bio?: string;
+  issues?: string;
+  seguidores: number;
+  seguindo: number;
 }
 // CLASSES
 
@@ -49,6 +58,9 @@ export default function Home() {
             img: "https://avatars.githubusercontent.com/u/9919?v=4",
             total_repo: "472",
             bio: " How people build software",
+            issues: 0,
+            seguidores:0,
+            seguindo: 0
           },
         ];
   });
@@ -56,6 +68,11 @@ export default function Home() {
   const [isAlert, setIsAlert] = useState<boolean>(false);
   const [valorPrev, setValorPrev] = useState<number>(0);
   const [valorNext, setValorNext] = useState<number>(4);
+  // const [Add, setAdd] = useState<boolean>(false);
+  const [confirmRep, setConfirmRep] = useState<Repositorio[]  | null>()
+
+  const meuElementoRef = useRef(null);
+
 
   const handleMostrarMais = () => {
     if (valorNext < repos.length) {
@@ -70,12 +87,23 @@ export default function Home() {
       setValorNext((prev) => Math.max(prev - 4, 4));
     }
   };
-
+   
   const alterValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsAlert(false);
     setNewUser(e.target.value);
   };
+ 
+  const handleAddUser = () => {
+    if (confirmRep) {
+      setRepos((prevRepos) => [...confirmRep, ...prevRepos]);
+      setNewUser("");
+      setConfirmRep(null);
+    }
+  };
 
+  const handleCancelAdd = () => {
+    setConfirmRep(null);
+  };
   // UPDATE
   useEffect(() => {
     localStorage.setItem("Repositorios", JSON.stringify(repos));
@@ -99,33 +127,33 @@ export default function Home() {
         if (userAlreadyExists) {
           throw new Error("Usuário já existe na lista");
         }
-
-        const response = await api.get(`users/${newUser}`);
+        
+        const response = await api.get(`users/${newUser}`);  
+        const response2 = await api.get(`users/${newUser}/followers`);    
+        const response3 = await api.get(`users/${newUser}/following`); 
         const { login, name, avatar_url, public_repos, bio } = response.data;
+        const followers = response2.data;
+        const following = response3.data;
 
-        setRepos((prevRepos) => [
-          {
-            login: login,
-            name: name,
-            img: avatar_url,
-            total_repo: public_repos,
-            bio: bio,
-          },
-          ...prevRepos,
-        ]);
-        setNewUser("");
+        
+        setConfirmRep([{login: login, name: name, img: avatar_url, total_repo:public_repos, bio:bio, seguidores: followers.length, seguindo: following.length}])
+        
+     
+
+
+     
       } catch (error) {
         setIsAlert(true);
       } finally {
         setLoading(false);
       }
     },
-    [newUser, repos]
+    [newUser, repos ]
   );
 
   return (
     <>
-      <Container>
+      <Container >
         <ContainerForm>
           <FaGithub size={80} />
           <Form onSubmit={RepSubmit} error={isAlert ? 1 : 0}>
@@ -138,6 +166,18 @@ export default function Home() {
             <ButtonSubmit disabled={loading}>
               <AddRep size={30} />
             </ButtonSubmit>
+            { confirmRep &&
+              <ShowerRepOpt>
+                <Usuario>
+                    <img src={confirmRep[0].img} alt="perfil" />
+                    <h4>{confirmRep[0].name ? confirmRep[0].name : confirmRep[0].login}</h4>
+                </Usuario>
+                <Ok>
+                  <Cancel onClick={handleCancelAdd}/>
+                  <Save onClick={handleAddUser} />
+                </Ok>
+              </ShowerRepOpt>
+            }
           </Form>
         </ContainerForm>
         <Perfil>
@@ -161,12 +201,12 @@ export default function Home() {
                       {repos[0].total_repo ? repos[0].total_repo : "0"}{" "}
                     </p>
                     <p>Stars: {repos[0].stars ? repos[0].stars : 0}</p>
-                    <p>Issues</p>
+                    <p>Seguidores: {repos[0].seguidores ? repos[0].seguidores : 0}</p>
                   </div>
                   <div>
                     <p>Issues</p>
-
                     <p>Forks</p>
+                    <p>Seguindo: {repos[0].seguidores ? repos[0].seguidores : 0}</p>
                   </div>
                 </InfContainer>
               </InfPerfil>
@@ -174,13 +214,21 @@ export default function Home() {
           )}
           <ListAdd>
             {repos.slice(valorPrev, valorNext).map((valor, index) => (
-              <ContainerRep key={index}>
+                <Link to={"#"} key={index}>
+              <ContainerRep ref={meuElementoRef}>
                 <div>
                   <img src={valor.img} alt={`Repository ${valor.name}`} />
                   <p>{valor.name ? valor.name : valor.login}</p>
                 </div>
-                <ConfigIcon />
+                <ConfigIcon onClick={()=>{
+                 console.log(meuElementoRef.current);
+                 return (
+                    <Edit>cl</Edit>
+                 )
+                  
+                }}/>
               </ContainerRep>
+                </Link>
             ))}
 
             {repos.length > 4 && (

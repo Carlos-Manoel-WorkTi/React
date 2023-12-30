@@ -3,7 +3,22 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import styled from "styled-components";
+import { MdCancel } from "react-icons/md";
+import { GiConfirmed } from "react-icons/gi";
 
+
+
+export const Save = styled(GiConfirmed)`
+    font-size: 1.5em;
+    background-color: #09900b;
+    border-radius: 50%;
+`
+export const Cancel = styled(MdCancel)`
+    font-size: 1.5em;
+    background-color: red;
+    border-radius: 50%;
+    /* color: white; */
+`
 export  const SetaLeft = styled(TiArrowLeftOutline)`
  color: #ffffff;
  font-size: 3em;

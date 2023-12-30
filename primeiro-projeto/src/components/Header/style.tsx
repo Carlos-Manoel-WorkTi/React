@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Heade = styled.header`
 background-color: #000000;
@@ -35,3 +35,43 @@ export const Logo = styled.h1`
   background-clip: text;
   -webkit-text-fill-color: transparent; /* Tornar o texto transparente */
 `;
+
+
+
+import { Link } from 'react-router-dom';
+
+const expandFromLeft = keyframes`
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+`;
+
+export const Active = styled.li`
+  position: relative;
+  list-style: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #6412e8;
+    animation: ${expandFromLeft} 1s ease-in-out forwards;
+  }
+`;
+
+export const LinkText = styled(Link)`
+  color: #000; /* Cor do texto */
+  text-decoration: none;
+  font-weight: bold; /* Se desejar negrito */
+  /* Outros estilos que você queira adicionar */
+`;
+
+
+
+

@@ -195,3 +195,47 @@ export const ButtonSubmit = styled.button<ButtonSubmitProps>`
 `;
 
 
+
+
+
+export const ShowerRepOpt = styled.div`
+   width: 300px;
+   height: 70px;
+   background-color: #171717;
+   position: absolute;
+   margin-top: 50px;
+   margin-right: 60px;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+`
+export const Usuario = styled.div`
+   display: flex;
+   align-items: center;
+   justify-content: start;
+   gap: 8px;
+   img{
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+   }
+   h4{
+      color: white;
+   }
+`
+export const Ok = styled.div`
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+   gap: 10px;
+`
+
+
+/////////////////////////////////
+export const Edit = styled.div`
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+   gap: 10px;
+`
