@@ -3,11 +3,30 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import styled from "styled-components";
-import { MdCancel } from "react-icons/md";
+import { MdCancel,MdDeleteForever,  MdOutlineCancel } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";
+import { FaRegStar } from "react-icons/fa";
 
+export const StopEdit = styled(MdOutlineCancel)`
+&:hover{
+   color: #5c19b4;
+   transform: scale(1.2);
+}`
 
-
+export const Stars = styled(FaRegStar)`
+color: #fdfdd6;
+&:hover{
+   color: #f2f20e;
+   transform: scale(1.2);
+}
+`
+export const MdDelete = styled(MdDeleteForever)`
+color: red;
+&:hover{
+   color: #cd2a2acf;
+   transform: scale(1.3);
+}
+`
 export const Save = styled(GiConfirmed)`
     font-size: 1.5em;
     background-color: #09900b;
@@ -34,6 +53,10 @@ export const ConfigIcon = styled(CiMenuKebab)`
    text-align: end;
    justify-content: end;
    align-items: end;
+   &:hover{
+   color: #8241eacf;
+   transform: scale(1.4);
+}
 `
 export  const SetaRight = styled(TiArrowRightOutline)`
  color: #ffffff;

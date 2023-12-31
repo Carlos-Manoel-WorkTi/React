@@ -236,6 +236,6 @@ export const Ok = styled.div`
 export const Edit = styled.div`
    display: flex;
    align-items: center;
-   justify-content: space-around;
+   justify-content: end;
    gap: 10px;
 `

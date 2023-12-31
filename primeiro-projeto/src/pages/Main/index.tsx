@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState} from "react";
 import {
   Container,
   Form,
@@ -16,7 +16,6 @@ import {
   InfContainer,
   Edit,
 } from "./style";
-import { FaGithub } from "react-icons/fa";
 import {
   AddRep,
   ButtonMoreRespLeft,
@@ -24,6 +23,9 @@ import {
   ConfigIcon,
   SetaLeft,
   SetaRight,
+  MdDelete,
+  Stars,
+  StopEdit
 } from "./icons";
 
 
@@ -70,9 +72,15 @@ export default function Home() {
   const [valorNext, setValorNext] = useState<number>(4);
   // const [Add, setAdd] = useState<boolean>(false);
   const [confirmRep, setConfirmRep] = useState<Repositorio[]  | null>()
+  const [areaEditada, setAreaEditada] = useState(Array(repos.length).fill(false));
 
-  const meuElementoRef = useRef(null);
+  
 
+  const areaEdit = (index:number) => {
+    const newAreaEditada = [...areaEditada];
+    newAreaEditada[index] = !newAreaEditada[index];
+    setAreaEditada(newAreaEditada);
+  };
 
   const handleMostrarMais = () => {
     if (valorNext < repos.length) {
@@ -155,7 +163,6 @@ export default function Home() {
     <>
       <Container >
         <ContainerForm>
-          <FaGithub size={80} />
           <Form onSubmit={RepSubmit} error={isAlert ? 1 : 0}>
             <input
               onChange={alterValue}
@@ -214,20 +221,24 @@ export default function Home() {
           )}
           <ListAdd>
             {repos.slice(valorPrev, valorNext).map((valor, index) => (
-                <Link to={"#"} key={index}>
-              <ContainerRep ref={meuElementoRef}>
-                <div>
-                  <img src={valor.img} alt={`Repository ${valor.name}`} />
-                  <p>{valor.name ? valor.name : valor.login}</p>
-                </div>
-                <ConfigIcon onClick={()=>{
-                 console.log(meuElementoRef.current);
-                 return (
-                    <Edit>cl</Edit>
-                 )
-                  
-                }}/>
-              </ContainerRep>
+                  <Link to="#" key={index}>
+                  <ContainerRep>
+                    <div>
+                      <img src={valor.img} alt={`Repository ${valor.name}`} />
+                      <p>{valor.name ? valor.name : valor.login}</p>
+                    </div>
+        
+                    {areaEditada[index] ? (
+                      <Edit>
+                        <Stars />
+                        <MdDelete />
+                        <StopEdit onClick={()=> areaEdit(index)}/>
+                      </Edit>
+                    ) : (
+                      <ConfigIcon onClick={() => areaEdit(index)} />
+                    )}
+        
+                  </ContainerRep>
                 </Link>
             ))}
 

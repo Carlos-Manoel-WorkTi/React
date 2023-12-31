@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 
 html{
   background-color: black;
+  overflow: hidden;
 }
 
   button{
