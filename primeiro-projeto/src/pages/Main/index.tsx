@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Container,
   Form,
@@ -15,23 +15,22 @@ import {
   NamePerfil,
   InfContainer,
   Edit,
+  ButtonSeeMore,
 } from "./style";
 import {
   AddRep,
   ButtonMoreRespLeft,
   ButtonMoreRespRight,
   ConfigIcon,
-  SetaLeft,
   SetaRight,
   MdDelete,
   Stars,
-  StopEdit
+  StopEdit,
 } from "./icons";
 
-
 import api from "../../services/api";
-import { ShowerRepOpt, Usuario,Ok } from "./style";
-import { Save,Cancel } from "./icons";
+import { ShowerRepOpt, Usuario, Ok } from "./style";
+import { Save, Cancel } from "./icons";
 import { Link } from "react-router-dom";
 
 interface Repositorio {
@@ -61,22 +60,23 @@ export default function Home() {
             total_repo: "472",
             bio: " How people build software",
             issues: 0,
-            seguidores:0,
-            seguindo: 0
+            seguidores: 0,
+            seguindo: 0,
           },
         ];
   });
+  const inputReferenciaFocus = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState<boolean>(false);
   const [isAlert, setIsAlert] = useState<boolean>(false);
   const [valorPrev, setValorPrev] = useState<number>(0);
   const [valorNext, setValorNext] = useState<number>(4);
   // const [Add, setAdd] = useState<boolean>(false);
-  const [confirmRep, setConfirmRep] = useState<Repositorio[]  | null>()
-  const [areaEditada, setAreaEditada] = useState(Array(repos.length).fill(false));
+  const [confirmRep, setConfirmRep] = useState<Repositorio[] | null>();
+  const [areaEditada, setAreaEditada] = useState(
+    Array(repos.length).fill(false)
+  );
 
-  
-
-  const areaEdit = (index:number) => {
+  const areaEdit = (index: number) => {
     const newAreaEditada = [...areaEditada];
     newAreaEditada[index] = !newAreaEditada[index];
     setAreaEditada(newAreaEditada);
@@ -87,6 +87,8 @@ export default function Home() {
       setValorPrev((prev) => prev + 4);
       setValorNext((prev) => prev + 4);
     }
+    // reseta a area de edit
+    setAreaEditada(Array(repos.length).fill(false))
   };
 
   const handleMostrarMenos = () => {
@@ -95,12 +97,22 @@ export default function Home() {
       setValorNext((prev) => Math.max(prev - 4, 4));
     }
   };
-   
+  const removeRep = (index: number) => {
+    const realIndex = valorPrev + index; // Calcular o índice real na lista completa
+    setRepos((prevRepos) => {
+      const updatedRepos = [...prevRepos];
+      updatedRepos.splice(realIndex, 1); // Remove o repositório com base no índice real
+      return updatedRepos;
+    });
+  };
+  
+
+
   const alterValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsAlert(false);
     setNewUser(e.target.value);
   };
- 
+
   const handleAddUser = () => {
     if (confirmRep) {
       setRepos((prevRepos) => [...confirmRep, ...prevRepos]);
@@ -108,7 +120,7 @@ export default function Home() {
       setConfirmRep(null);
     }
   };
-
+ 
   const handleCancelAdd = () => {
     setConfirmRep(null);
   };
@@ -117,13 +129,19 @@ export default function Home() {
     localStorage.setItem("Repositorios", JSON.stringify(repos));
   }, [repos]);
 
+  useEffect(() => {
+    if (inputReferenciaFocus.current) inputReferenciaFocus.current.focus();
+}, [])
+
+
   const RepSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
+      
+      
       try {
         setLoading(true);
-
+        
         if (newUser.trim() === "") {
           throw new Error("Campo vazio");
         }
@@ -135,36 +153,41 @@ export default function Home() {
         if (userAlreadyExists) {
           throw new Error("Usuário já existe na lista");
         }
-        
-        const response = await api.get(`users/${newUser}`);  
-        const response2 = await api.get(`users/${newUser}/followers`);    
-        const response3 = await api.get(`users/${newUser}/following`); 
+
+        const response = await api.get(`users/${newUser}`);
+        const response2 = await api.get(`users/${newUser}/followers`);
+        const response3 = await api.get(`users/${newUser}/following`);
         const { login, name, avatar_url, public_repos, bio } = response.data;
         const followers = response2.data;
         const following = response3.data;
 
-        
-        setConfirmRep([{login: login, name: name, img: avatar_url, total_repo:public_repos, bio:bio, seguidores: followers.length, seguindo: following.length}])
-        
-     
-
-
-     
+        setConfirmRep([
+          {
+            login: login,
+            name: name,
+            img: avatar_url,
+            total_repo: public_repos,
+            bio: bio,
+            seguidores: followers.length,
+            seguindo: following.length,
+          },
+        ]);
       } catch (error) {
         setIsAlert(true);
       } finally {
         setLoading(false);
       }
     },
-    [newUser, repos ]
+    [newUser, repos]
   );
 
   return (
     <>
-      <Container >
+      <Container>
         <ContainerForm>
           <Form onSubmit={RepSubmit} error={isAlert ? 1 : 0}>
             <input
+              ref={inputReferenciaFocus}
               onChange={alterValue}
               value={newUser}
               type="text"
@@ -173,18 +196,22 @@ export default function Home() {
             <ButtonSubmit disabled={loading}>
               <AddRep size={30} />
             </ButtonSubmit>
-            { confirmRep &&
+            {confirmRep && (
               <ShowerRepOpt>
                 <Usuario>
-                    <img src={confirmRep[0].img} alt="perfil" />
-                    <h4>{confirmRep[0].name ? confirmRep[0].name : confirmRep[0].login}</h4>
+                  <img src={confirmRep[0].img} alt="perfil" />
+                  <h4>
+                    {confirmRep[0].name
+                      ? confirmRep[0].name
+                      : confirmRep[0].login}
+                  </h4>
                 </Usuario>
                 <Ok>
-                  <Cancel onClick={handleCancelAdd}/>
+                  <Cancel onClick={handleCancelAdd} />
                   <Save onClick={handleAddUser} />
                 </Ok>
               </ShowerRepOpt>
-            }
+            )}
           </Form>
         </ContainerForm>
         <Perfil>
@@ -207,13 +234,21 @@ export default function Home() {
                       Repositórios:{" "}
                       {repos[0].total_repo ? repos[0].total_repo : "0"}{" "}
                     </p>
-                    <p>Stars: {repos[0].stars ? repos[0].stars : 0}</p>
-                    <p>Seguidores: {repos[0].seguidores ? repos[0].seguidores : 0}</p>
+                    <p>
+                       Seguindo: {repos[0].seguidores ? repos[0].seguidores : 0}
+                    </p>
+                   
+                    <p>
+                      Seguidores:{" "}
+                      {repos[0].seguidores ? repos[0].seguidores : 0}
+                    </p>
                   </div>
                   <div>
                     <p>Issues</p>
                     <p>Forks</p>
-                    <p>Seguindo: {repos[0].seguidores ? repos[0].seguidores : 0}</p>
+                    <p>
+                     <ButtonSeeMore to={`/repositorio/${repos[0].login}`}>Ver mais</ButtonSeeMore>
+                    </p>
                   </div>
                 </InfContainer>
               </InfPerfil>
@@ -221,25 +256,24 @@ export default function Home() {
           )}
           <ListAdd>
             {repos.slice(valorPrev, valorNext).map((valor, index) => (
-                  <Link to="#" key={index}>
-                  <ContainerRep>
-                    <div>
-                      <img src={valor.img} alt={`Repository ${valor.name}`} />
-                      <p>{valor.name ? valor.name : valor.login}</p>
-                    </div>
-        
-                    {areaEditada[index] ? (
-                      <Edit>
-                        <Stars />
-                        <MdDelete />
-                        <StopEdit onClick={()=> areaEdit(index)}/>
-                      </Edit>
-                    ) : (
-                      <ConfigIcon onClick={() => areaEdit(index)} />
-                    )}
-        
-                  </ContainerRep>
-                </Link>
+              <Link to="#" key={index}>
+                <ContainerRep>
+                  <div>
+                    <img src={valor.img} alt={`Repository ${valor.name}`} />
+                    <p>{valor.name ? valor.name : valor.login}</p>
+                  </div>
+
+                  {areaEditada[index] ? (
+                    <Edit>
+                      <Stars />
+                      <MdDelete onClick={() => removeRep(index)} />
+                      <StopEdit onClick={() => areaEdit(index)} />
+                    </Edit>
+                  ) : (
+                    <ConfigIcon onClick={() => areaEdit(index)} />
+                  )}
+                </ContainerRep>
+              </Link>
             ))}
 
             {repos.length > 4 && (
@@ -253,8 +287,9 @@ export default function Home() {
           </ListAdd>
         </Perfil>
         <ContainerButtons>
-          <SetaLeft />
+          <Link to={`/repositorio/${repos[0].login}`}>
           <SetaRight />
+          </Link>
         </ContainerButtons>
       </Container>
     </>

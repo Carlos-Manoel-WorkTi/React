@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 // CONTAINER
@@ -45,6 +46,11 @@ export const Form = styled.form<{error:number | undefined}>`
     border-radius: 20px;
     background-color: rgb(17, 19, 20);
     width: 450px;
+    &:focus {
+      outline: none;
+      border-color:  ${props => (props.error ? "red" : " #5100ff")}; 
+      box-shadow: 0 0 5px ${props => (props.error ? "rgba(255, 17, 0, 0.5)" : " rgba(0, 0, 255, 0.5)")}; 
+    }
   }
 `;
 
@@ -122,13 +128,24 @@ export const InfoColumn = styled.div`
   align-items: center;
 `;
 //  BUTTON
+export const ButtonSeeMore = styled(Link)`
+  background-color: #1470b3;
+  color: white;
+  border: none;
+  display: flex;
+  font-size: 0.7em;
+  padding: 5px;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+`
 
 export const ContainerButtons =  styled.div`
   display: flex;
   width: 70%;
   height: 100px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   text-align: center;
   
   &:hover{
